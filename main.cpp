@@ -5,7 +5,8 @@ void createMode();
 void createOutOfFile();
 void createOutOfCommandline();
 void uncoverMode();
-std::string secretFormula();
+std::string secretFormula(std::string &content);
+
 
 int main(){	
 	
@@ -51,10 +52,10 @@ void createMode(){
 		case '1':
 			createOutOfFile();
 			break;
-	/*	case '2':
+		case '2':
 			createOutOfCommandline();
 			break;
-		case '3':
+	/*	case '3':
 			std::cout << '\n' << "Quitting Creation Mode...";
 			break;
 	*/	default:
@@ -69,9 +70,9 @@ void createOutOfFile(){
 	std::string importFilename;
 	std::string exportFilename;
 
-	std::cout << "Enter the name of the file you want to turn into a secret: ";
+	std::cout << '\n' << "Enter the name of the file you want to turn into a secret: ";
 	std::cin >> importFilename;
-	std::cout << "Enter the name of the file you want the secret written in: ";
+	std::cout << '\n' << "Enter the name of the file you want the secret written in: ";
 	std::cin >> exportFilename;
 	
 	std::ifstream ImportFile;
@@ -101,3 +102,47 @@ void createOutOfFile(){
 	ImportFile.close();
 	ExportFile.close();
 }
+
+void createOutOfCommandline(){
+	std::string exportFilename;
+	std::string importContent;
+
+	std::cout << "Enter the name of the file you want the secret written in: ";
+	std::cin >> exportFilename;
+	std::cout << '\n' << "Paste/Write what you want to turn into a Secret: ";
+	std::cin >> importContent;
+
+	std::ofstream ExportFile(exportFilename);
+	ExportFile << secretFormula(importContent);
+	ExportFile.close();
+}
+
+std::string secretFormula(std::string &content){
+	char piNum[1];
+	std::string result;
+	std::ifstream piFile("pi_dec_1m.txt");
+	if(!piFile.is_open()){
+	std::cout << '\n' << "Error reading PI file";
+	}
+
+	for(int i = 0; i < content.length(); i++){
+		int asciiVal = (int)content.at(i) + 12;
+		piFile.read(piNum, 1);
+		piFile.seekg(1, std::ios::cur);
+		if(piNum[0] == '0'){
+		piNum[0] = '2';
+		}
+		asciiVal *= piNum[0] - '0';
+		if(asciiVal < 10){
+			result += "000" + std::to_string(asciiVal);
+		} else if(asciiVal < 100){
+			result += "00" + std::to_string(asciiVal);
+		} else if(asciiVal < 1000){
+			result += "0" + std::to_string(asciiVal);
+		} else {
+			result += std::to_string(asciiVal);
+		}
+	}
+	piFile.close();
+	return result;
+};
