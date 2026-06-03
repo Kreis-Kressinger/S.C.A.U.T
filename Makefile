@@ -1,5 +1,5 @@
 CC = g++
-TARGET = S.C.A.U.T
+TARGET = S.C.A.U.T-Program.exe
 SOURCE = main.cpp
 
 all:
