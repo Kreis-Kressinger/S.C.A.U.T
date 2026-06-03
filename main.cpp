@@ -15,7 +15,7 @@ int main(){
 	
 	char choice;
 	do{
-		std::cout << "**************" << '\n' << "S.C.A.U.T" << '\n' << "**************" << '\n' << '\n';
+		std::cout << '\n'<< "**************" << '\n' << "S.C.A.U.T" << '\n' << "**************" << '\n' << '\n';
 		std::cout << "Pick an option:" << '\n' << "1. Create Secret" << '\n' << "2. Uncover Secret" << '\n' << "3. Quit" << '\n';
 		
 		std::cin >> choice;
@@ -24,8 +24,8 @@ int main(){
 		switch(choice){
 		case '1':
 			createMode();
-			break;
 			std::cout << '\n' << '\n';
+			break;
 		case '2':
 			uncoverMode();
 			std::cout << '\n' << '\n';
@@ -75,10 +75,10 @@ void createOutOfFile(){
 
 	std::cout << '\n' << '\n' << "Enter the name of the file you want to turn into a secret: ";
 	std::getline(std::cin, importFilename);
-	std::cin.ignore(256, '\n');
+	
 	std::cout << "Enter the name of the file you want the secret written in: ";
 	std::getline(std::cin, exportFilename);
-	std::cin.ignore(256, '\n');
+	
 	
 	std::ifstream ImportFile;
 	ImportFile.open(importFilename, std::ifstream::in);
@@ -114,10 +114,10 @@ void createOutOfCommandline(){
 
 	std::cout << "Enter the name of the file you want the secret written in: ";
 	std::getline(std::cin, exportFilename);
-	std::cin.ignore(256, '\n');
+	
 	std::cout << "Paste/Write what you want to turn into a Secret: ";
 	std::getline(std::cin, importContent);
-	std::cin.ignore(256, '\n');
+	
 
 	std::ofstream ExportFile(exportFilename);
 	ExportFile << secretFormula(importContent);
@@ -131,7 +131,7 @@ std::string secretFormula(std::string &content){
 	std::string keyFileName;
 	std::cout << "Enter the name of your keyfile: ";
 	std::getline(std::cin, keyFileName);
-	std::cin.ignore(256, '\n');
+	
 	std::ifstream keyFile(keyFileName);
 	if(!keyFile.is_open()){
 	std::cout << '\n' << "Error reading key file";
@@ -156,7 +156,7 @@ std::string reverseSecretFormula(std::string &content){
 	std::string keyFileName;
 	std::cout << "Enter the name of your keyfile: ";
 	std::getline(std::cin, keyFileName);
-	std::cin.ignore(256, '\n');
+	
 	std::ifstream keyFile(keyFileName);
 	if(!keyFile.is_open()){
 	std::cout << '\n' << "Error reading key file";
@@ -209,10 +209,10 @@ void uncoverOutOfCommandline(){
 
 	std::cout << "Enter the name of the file (it will create one if it doesn't exist) you want the uncovered secret written in: ";
 	std::getline(std::cin, exportFilename);
-	std::cin.ignore(256, '\n');
+	
 	std::cout << "Paste/Write what you want to turn into a uncover: ";
 	std::getline(std::cin, importContent);
-	std::cin.ignore(256, '\n');
+	
 
 	std::ofstream ExportFile(exportFilename);
 	ExportFile << reverseSecretFormula(importContent);
@@ -225,10 +225,10 @@ void uncoverOutOfFile(){
 
 	std::cout << '\n' << "Enter the name of the file that has a secret to uncover: ";
 	std::getline(std::cin, importFilename);
-	std::cin.ignore(256, '\n');
-	std::cout << '\n' << "Enter the name of the file you want the uncovered secret written in: ";
+	
+	std::cout << "Enter the name of the file you want the uncovered secret written in: ";
 	std::getline(std::cin, exportFilename);
-	std::cin.ignore(256, '\n');
+	
 	
 	std::ifstream ImportFile;
 	ImportFile.open(importFilename, std::ifstream::in);
