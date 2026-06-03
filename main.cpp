@@ -130,7 +130,7 @@ std::string secretFormula(std::string &content){
 	std::string result;
 	std::string keyFileName;
 	std::cout << "Enter the name of your keyfile: ";
-	std::getline(std::cin, exportFilename);
+	std::getline(std::cin, keyFileName);
 	std::cin.ignore(256, '\n');
 	std::ifstream keyFile(keyFileName);
 	if(!keyFile.is_open()){
@@ -155,7 +155,7 @@ std::string reverseSecretFormula(std::string &content){
 	std::string result;
 	std::string keyFileName;
 	std::cout << "Enter the name of your keyfile: ";
-	std::getline(std::cin, exportFilename);
+	std::getline(std::cin, keyFileName);
 	std::cin.ignore(256, '\n');
 	std::ifstream keyFile(keyFileName);
 	if(!keyFile.is_open()){
