@@ -164,6 +164,7 @@ std::string secretFormula(std::string &content, std::string exportFilename, std:
 	
 	if(std::toupper(static_cast<unsigned char>(option)) != 'Y'){
 		std::cout << "***** Aborted process *****\n";
+		keyFile.close();
 		return "";
 	}
 
@@ -207,6 +208,7 @@ std::string reverseSecretFormula(std::string &content, std::string exportFilenam
 	
 	if(std::toupper(static_cast<unsigned char>(option)) != 'Y'){
 		std::cout << "***** Aborted process *****\n";
+		keyFile.close();
 		return "";
 	}
 
@@ -214,7 +216,7 @@ std::string reverseSecretFormula(std::string &content, std::string exportFilenam
 		const char* pointa = content.c_str();
 		int charLength = strcspn(pointa, delim);
 		std::string temp1= content.substr(0, charLength);
-		if(temp1.empty()){
+		if(temp1.empty() || temp1 == ""){
 		break;
 		}
 		int temp2 = std::stoi(temp1);
