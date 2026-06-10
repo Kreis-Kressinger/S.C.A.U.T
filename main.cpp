@@ -6,8 +6,8 @@ void createMode();
 void createOutOfFile();
 void createOutOfCommandline();
 void uncoverMode();
-std::string secretFormula(std::string &content);
-std::string reverseSecretFormula(std::string &content);
+std::string secretFormula(std::string &content, std::string exportFilename, std::string importFilename);
+std::string reverseSecretFormula(std::string &content, std::string exportFilename, std::string importFilename);
 void uncoverOutOfFile();
 void uncoverOutOfCommandline();
 
@@ -102,7 +102,7 @@ void createOutOfFile(){
 	std::string importedFileContent = buffer;
 	delete[] buffer;
 	
-	ExportFile << secretFormula(importedFileContent);
+	ExportFile << secretFormula(importedFileContent, exportFilename, importFilename);
 	
 	ImportFile.close();
 	ExportFile.close();
@@ -120,27 +120,43 @@ void createOutOfCommandline(){
 	
 
 	std::ofstream ExportFile(exportFilename);
-	ExportFile << secretFormula(importContent);
+	ExportFile << secretFormula(importContent, exportFilename, "None (Out of command line)");
 	ExportFile.close();
 }
 
-std::string secretFormula(std::string &content){
+std::string secretFormula(std::string &content, std::string exportFilename, std::string importFilename){
 	char keyNum[1];
 	char* keyNumPointer = keyNum;
 	std::string result;
 	std::string keyFileName;
 	std::cout << "Enter the name of your keyfile: ";
 	std::getline(std::cin, keyFileName);
-	
+		
 	std::ifstream keyFile(keyFileName);
 	if(!keyFile.is_open()){
 	std::cout << '\n' << "Error reading key file";
 	return "Error";
 	}
-	for(int i = 0; i < content.length(); i++){
-		int temp = int(content.at(i));
+	char option;
+	std::cout << "Configuration:\nImportfile: " << importFilename 
+		  << "\nExportfile: " << exportFilename 
+		  << "\nKeyFilename: " << keyFileName 
+		  << "\nContinue with this configuration? (y/N) ";
+	
+	std::cin >> option;
+	
+	if(std::toupper(static_cast<unsigned char>(option)) != 'Y'){
+		return "";
+	}
+
+	for(size_t i = 0; i < content.length(); i++){
+		int temp = static_cast<int>(content.at(i));
+		if(keyFile.peek() == EOF){
+			keyFile.clear();
+			keyFile.seekg(0);
+		}
 		keyFile.read(keyNumPointer, 1);
-		temp += int(keyNum[0]);
+		temp += static_cast<int>(keyNum[0]);
 		result += std::to_string(temp) + ".";
 	}
 	keyFile.close();
@@ -148,7 +164,7 @@ std::string secretFormula(std::string &content){
 	return result;
 };
 
-std::string reverseSecretFormula(std::string &content){
+std::string reverseSecretFormula(std::string &content, std::string exportFilename, std::string importFilename){
 	char keyNum[1];
 	const char* delim = ".";
 	char* keyNumPointer = keyNum;
@@ -161,13 +177,31 @@ std::string reverseSecretFormula(std::string &content){
 	if(!keyFile.is_open()){
 	std::cout << '\n' << "Error reading key file";
 	return "Error";}
+
+	char option;
+	std::cout << "Configuration:" 
+		  << "\n- Importfile: " << importFilename 
+		  << "\n- Exportfile: " << exportFilename 
+		  << "\n- KeyFilename: " << keyFileName 
+		  << "\nContinue with this configuration? (y/N) ";
+	
+	std::cin >> option;
+	
+	if(std::toupper(static_cast<unsigned char>(option)) != 'Y'){
+		return "";
+	}
+
 	while(!content.empty()){
 		const char* pointa = content.c_str();
 		int charLength = strcspn(pointa, delim);
 		int temp = std::stoi(content.substr(0, charLength));
 		content.erase(0, charLength+1);
+		if(keyFile.peek() == EOF){
+			keyFile.clear();
+			keyFile.seekg(0);
+		}
 		keyFile.read(keyNumPointer, 1);
-		temp -= int(keyNum[0]);
+		temp -= static_cast<int>(keyNum[0]);
 		result += char(temp);
 	}
 	keyFile.close();
@@ -215,7 +249,7 @@ void uncoverOutOfCommandline(){
 	
 
 	std::ofstream ExportFile(exportFilename);
-	ExportFile << reverseSecretFormula(importContent);
+	ExportFile << reverseSecretFormula(importContent, exportFilename, "None (Out of command line)");
 	ExportFile.close();
 }
 
@@ -252,7 +286,7 @@ void uncoverOutOfFile(){
 	std::string importedFileContent = buffer;
 	delete[] buffer;
 	
-	ExportFile << reverseSecretFormula(importedFileContent);
+	ExportFile << reverseSecretFormula(importedFileContent, exportFilename, importFilename);
 	
 	ImportFile.close();
 	ExportFile.close();
